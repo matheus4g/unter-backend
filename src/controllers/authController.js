@@ -19,7 +19,7 @@ router.post('/register', async (req, res) => {
 
   try {
     if (await User.findOne({ email })) {
-      return res.status(400).send({ error: 'User already exists' })
+      return res.send({ error: 'User already exists' })
     }
 
     const user = await User.create(req.body)
@@ -29,7 +29,7 @@ router.post('/register', async (req, res) => {
       token: generateToken({ id: user.id })
     })
   } catch (err) {
-    return res.status(400).send({ error: 'Registration failed' })
+    return res.send({ error: 'Registration failed' })
   }
 })
 
@@ -41,7 +41,7 @@ router.post('/authenticate', async (req, res) => {
   if (!user) { return res.send({ error: 'User not found' }) }
 
   if (!await bcrypt.compare(password, user.password)) {
-    return res.status(400).send({ error: 'Invalid password' })
+    return res.send({ error: 'Invalid password' })
   }
 
   user.password = undefined
